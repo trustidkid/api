@@ -1,5 +1,7 @@
 const express = require('express');
 const app = express();
+//const request = express('request');
+const cors = express('cors');
 
 const mysql = require('mysql');
 
@@ -11,6 +13,13 @@ let orders = [];
 //middleware
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: false }));
+app.use(cors());
+
+//implement middleware to apply CORS
+/*app.use((req,res, next) => {
+    res.header('Access-Control-Allow-Origin','*');
+    next();
+});*/
 
 /*let con = mysql.createConnection({
     host: "localhost",
@@ -31,6 +40,7 @@ app.post("/new-order", (req, res) => {
     console.log(req.body);
     //if (order.food_name && order.customer_name && order.food_qty) {
         if(food_name && customer_name && food_qty){
+
       orders.push({ food_name,customer_name,food_qty,
       //  ...order,
   
@@ -53,7 +63,13 @@ app.post("/new-order", (req, res) => {
   Get the all the list of order
    */
   app.get("/get-orders",(req, res)=>{
-      if(orders.length !== null || undefined)
+  /* request({ url: 'http://204915e8.ngrok.io/get-orders'},
+    (error,response, body)=>{
+        if(error || response.statusCode !== 200){
+            return response.status(500).json({type: 'error', message: error.message});
+        }
+    });*/
+      if(orders.length !== null || undefined || orders === "")
       res.status(200).send(orders);
   })
   /*
